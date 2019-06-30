@@ -1,6 +1,5 @@
 package br.com.morasene.caixaeletronico.service;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -41,7 +40,7 @@ public class CaixaEletronicoServiceTests {
 	}
 
 	@Test
-	public void validarSucesso() throws Exception {
+	public void validarSuccess() throws Exception {
 		CashOutInputDTO dto = new CashOutInputDTO();
 		dto.setValue(BigDecimal.TEN);
 		validator(dto, 0);
@@ -51,7 +50,7 @@ public class CaixaEletronicoServiceTests {
 	}
 
 	@Test
-	public void validarSucessoDez() throws Exception {
+	public void validarSuccessTen() throws Exception {
 		CashOutInputDTO dto = new CashOutInputDTO();
 		dto.setValue(BigDecimal.TEN);
 		validator(dto, 0);
@@ -63,7 +62,7 @@ public class CaixaEletronicoServiceTests {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void validarSucessoOnze() throws Exception {
+	public void validarErrorEleven() throws Exception {
 		CashOutInputDTO dto = new CashOutInputDTO();
 		dto.setValue(BigDecimal.valueOf(11.00));
 		validator(dto, 0);
@@ -71,20 +70,21 @@ public class CaixaEletronicoServiceTests {
 	}
 
 	@Test
-	public void validarFalhaZero() throws Exception {
+	public void validarErrorZero() throws Exception {
 		CashOutInputDTO dto = new CashOutInputDTO();
 		dto.setValue(BigDecimal.ZERO);
 		validator(dto, 1);
 	}
 
+	@Test
+	public void validarErrorNull() throws Exception {
+		CashOutInputDTO dto = new CashOutInputDTO();
+		validator(dto, 1);
+	}
+	
 	private void validator(CashOutInputDTO dto, int expected) {
 		Set<ConstraintViolation<CashOutInputDTO>> constraintViolations = validator.validate(dto);
 		assertEquals(expected, constraintViolations.size());
 	}
 
-	@Test
-	public void validarFalhaNulo() throws Exception {
-		CashOutInputDTO dto = new CashOutInputDTO();
-		validator(dto, 1);
-	}
 }
